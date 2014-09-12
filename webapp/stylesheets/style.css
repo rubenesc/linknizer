@@ -1,0 +1,69 @@
+a.plain:link
+{ color: #333; text-decoration: none }
+a.plain:active
+{ color: #333; text-decoration: none }
+a.plain:visited
+{ color: #333; text-decoration: none }
+a.plain:hover
+{ color: #333; text-decoration: none }
+
+.status-bar {
+    height: 60px;
+}
+
+.about-icon {
+    float: left;
+    margin-right: 12px;
+}
+
+a.content-tag{
+    border:                             1px solid #d6d6d6;
+    -webkit-border-radius:              5px;
+    -moz-border-radius:                 5px;
+    border-radius:                      5px;
+    background:                         #e6e7e7;
+    color:                              #989898;
+    text-decoration:                    none;
+    font-size:                          12px;
+    padding:                            1px 5px;
+    float:                              left;
+    margin-left: 5px;
+}
+
+.dress-footer{
+    position:                           absolute;
+    bottom:                             0;
+    /*height:                             40px;*/
+    margin:                             0;
+    width:                              100%;
+    position: static;
+    margin-bottom: 18px;
+    padding-top: 5px;
+}
+
+.thumbnail {
+background: #fff;
+}
+
+
+body {
+  background-color: #e4e4e4;
+}
+
+
+
+h4.fontface {font: 60px/68px 'BebasRegular', Arial, sans-serif;letter-spacing: 0; text-transform: capitalize}
+
+
+
+@font-face {
+    font-family: 'BebasRegular';
+    src: url('BEBAS___-webfont.eot');
+    src: url('BEBAS___-webfont.eot?#iefix') format('embedded-opentype'),
+         url('BEBAS___-webfont.woff') format('woff'),
+         url('BEBAS___-webfont.ttf') format('truetype'),
+         url('BEBAS___-webfont.svg#BebasRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}

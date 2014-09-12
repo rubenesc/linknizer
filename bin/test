@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+	
+ 
+# --globals runSequentially  --> http://stackoverflow.com/questions/8360318/global-leak-errors-in-mocha	
+
+#complete set of tests
+./node_modules/mocha/bin/mocha --globals runSequentially --timeout 10000 test/app/auth-test test/models/user-test test/models/item-test test/app/users-test test/app/categories-test test/app/links-test test/app/helpers-test
+
+
+#./node_modules/mocha/bin/mocha --globals runSequentially --timeout 10000 test/app/auth-test test/models/user-test test/app/categories-test test/app/links-test
+
+
+#./node_modules/mocha/bin/mocha --globals runSequentially --timeout 10000 test/app/auth-test test/app/items-test test/app/helpers-test
+#./node_modules/mocha/bin/mocha --globals runSequentially --timeout 10000 test/app/auth-test test/app/helpers-test
+#./node_modules/mocha/bin/mocha --globals runSequentially --timeout 10000 test/app/auth-test test/models/user-test test/models/item-test test/app/items-test
