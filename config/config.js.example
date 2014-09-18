@@ -7,6 +7,12 @@ module.exports = {
       },
       db: 'mongodb://localhost/db_dev',
 
+      facebook: {
+        clientID: "", 
+        clientSecret: "",
+        callbackURL: "http://localhost:3000/auth/facebook/callback"
+      },
+
       s3: {
         key: '_KEY_',
         secret: '_SECRET_',
@@ -28,6 +34,12 @@ module.exports = {
       },
       db: 'mongodb://localhost/db_test',
 
+      facebook: {
+        clientID: "", 
+        clientSecret: "",
+        callbackURL: "http://localhost:3000/auth/facebook/callback"
+      },
+
       s3: {
         key: '_KEY_',
         secret: '_SECRET_',
@@ -48,6 +60,12 @@ module.exports = {
         name: 'Prod'
       },
       db: 'mongodb://localhost/db_prod',
+
+      facebook: {
+        clientID: "", 
+        clientSecret: "",
+        callbackURL: "http://localhost:3000/auth/facebook/callback"
+      },
 
       s3: {
         key: '_KEY_',

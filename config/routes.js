@@ -19,11 +19,40 @@ module.exports = function(app, passport, auth, user) {
 		}
 	});	
 
-	//user
+	app.get('/logout', auth.requiresLogin, function(req, res){
+		console.log("ajajajajja"); 
+		res.redirect("/");
+	});
+	
+
+	//user - login
 	app.get("/login", function(req, res){ res.render("login"); });
 	app.post('/login', passport.authenticate('local', { failureRedirect: '/login' }), users.session);
-	app.post('/signup', users.create);
 
+	// =====================================
+	// FACEBOOK ROUTES =====================
+	// =====================================
+	// route for facebook authentication and login
+  	app.get('/auth/facebook',
+    	passport.authenticate('facebook', {
+      		scope: [ 'email', 'user_about_me'],
+      		failureRedirect: '/login'
+    	}), 
+    	function(req, res){
+		    // The request will be redirected to Facebook for authentication, so this
+		    // function will not be called.
+    		console.log("redirecting to Facebook Authentication");
+	});
+
+
+	// handle the callback after facebook has authenticated the user
+  	app.get('/auth/facebook/callback',
+    	passport.authenticate('facebook', {
+      	failureRedirect: '/login'
+    }), users.session);
+  
+
+	app.post('/signup', users.create);
 
 	app.get("/signup", function(req, res){
 		res.render("signup");
@@ -34,19 +63,19 @@ module.exports = function(app, passport, auth, user) {
 	});	
 
 	app.post("/forgot", users.forgot);
-	app.get('/logout', auth.requiresLogin, users.logout);
+
 
 	//links
-	app.get('/links', auth.requiresLogin, links.list);
-	app.get('/links/:username', auth.requiresLogin, links.list2);
+	app.get('/links', auth.requiresLogin, links.list2);
+	// app.get('/links/:username', auth.requiresLogin, links.list2);
 
 
 	app.namespace('/api', function(){
 
 		app.post('/signup', users.create);
-		app.get('/users/:username', users.show);
-		app.put('/users/:username', users.update);
-		app.del('/users/:username', users.del);
+		// app.get('/users/:username', users.show);
+		// app.put('/users/:username', users.update);
+		// app.del('/users/:username', users.del);
 
 		// https://github.com/spumko/boom/blob/master/lib/index.js		
 		// http://passportjs.org/guide/login/

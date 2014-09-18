@@ -4,7 +4,7 @@
 
 	<section>
 		<div class="page-header" id="section-contact">
-			<h2>Login</h2>
+			<h2>Welcome Back</h2>
 		</div> 
 
 		<ul class="nav-panel">
@@ -14,11 +14,21 @@
 		</ul>
 
 		<div class="row">
-
+			<div class="col-lg-8">
+				<p>Sign In With</p>
+				<a href="/auth/facebook" class="btn btn-success">Facebook</a>
+			</div>
+		</div>
+				
+		<hr/>
+		
+		<div class="row">
 			<div class="col-lg-8">
 				<form action="/login" class="form-horizontal" role="form" method="post">
+
+
 					<div class="form-group">
-						<label for="email" class="col-lg-2 control-label">Email address</label>
+						<label for="email" class="col-lg-2 control-label">Email</label>
 
 						<div class="col-lg-10">
 							<input type="email" class="form-control" name="email" id="email">
@@ -33,14 +43,13 @@
 					</div>
 					<div class="form-group">
 						<div class="col-lg-10 col-lg-offset-2">
-							<button type="submit" class="btn btn-primary">Log In</button>
+							<button type="submit" class="btn btn-primary">Sign In</button>
 							<a href="/" class="btn btn-link">Cancel</a>
 						</div>
 
 					</div>
 				</form>
 			</div>
-
 		</div> 
 	</section>
 

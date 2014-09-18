@@ -14,8 +14,7 @@ var util = require('util');
 require('express-namespace');
    
 // Load configurations
-var env = process.env.NODE_ENV || 'development'
-  , config = require('./config/config')[env]
+var config = require('./config/config')
   , auth = require('./config/middleware/auth/authorization')
   , mongoose = require('mongoose');
 

@@ -359,6 +359,7 @@ function retrieveListOptions(req){
 	var limit = (req.param('limit') > 0 && req.param('limit') < 50) 
 					? req.param('limit') : 15;
 
+	limit = 1000;
 
 	//conditionally add members to object
 	var criteria = {};

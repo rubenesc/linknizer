@@ -202,14 +202,14 @@ exports.del = function(req, res, next) {
 	});
 }
 
-
 exports.session = function(req, res, next){
 
 	console.log();
 	util.debug('--> users.session');
 	util.debug('--> req.isAuthenticated(): ' + req.isAuthenticated());
 	
-	res.redirect("/links/"+req.currentUser.username);
+	res.redirect("/links");
+	// res.redirect("/links/"+req.currentUser.username);
 //	return res.send(200, {message: "user authenticated" });
 	
 }
