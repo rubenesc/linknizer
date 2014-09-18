@@ -12,7 +12,7 @@ var UserFactory = require("../helpers/user-factory");
 var util = require("util");
 
 var env = process.env.NODE_ENV || 'development'
-  , config = require('../../config/conf')[env];
+  , config = require('../../config/config')[env];
 
 /**
 	tests:

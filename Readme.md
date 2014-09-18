@@ -6,7 +6,7 @@
   $ cd linknizer
   $ npm install
   $ bower install
-  $ cp config/conf.example.js config/conf.js
+  $ cp config/config.js.example config/config.js
   $ npm start
 ```
 

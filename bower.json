@@ -7,7 +7,8 @@
     "jquery": "~1.9.1",
     "backbone": "~1.0.0",
     "underscore": "~1.4.4",
-    "requirejs-text": "~2.0.7"
+    "requirejs-text": "~2.0.7",
+    "bootstrap": "~3.2.0"
   },
   "devDependencies": {}
 }

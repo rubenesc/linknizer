@@ -8,6 +8,128 @@ var util = require('util');
 var ApplicationError = require("../helpers/applicationErrors");
 
 
+
+ exports.list2 = function(req, res, next) {
+
+ 	if (true){
+
+ 		var opts = retrieveListOptions(req);
+
+		Link.list(opts, function(err, data) {
+
+			if (err) return next(err);
+
+			var data2 = [];
+			for (var i in data){
+				data2.push(data[i].toClient());
+			}
+
+		    Link.count().exec(function (err, count) {
+
+				if (err) return next(err);
+
+				// res.send({
+				// 	currentUser: req.currentUser,
+				// 	links: data2, 
+			 //        page: opts.page + 1,
+	   //      		pages: Math.ceil(count / opts.limit)
+				// });
+
+				res.render("links/links", {
+					currentUser: req.currentUser,
+					links: JSON.stringify(data2), 
+			        page: opts.page + 1,
+	        		pages: Math.ceil(count / opts.limit)
+				});
+		    });
+
+		});
+
+
+		return;
+ 	}
+
+	var canEdit = false;
+	var isAdmin = false; 
+
+	CacheHelper.getConfig(function(err, config){
+
+		if (err) return next(err);
+
+		User.findByUsername(req.params.username, function(err, profileUser){
+
+
+			if (err || !profileUser) return next(err);
+
+			if (req.currentUser.id === profileUser.id){
+				canEdit = true;
+			}
+
+
+			if (canEdit && !profileUser.isAdmin()){
+				//if I am a normal user, and I am in my profile, verify if
+				//the I can still the scores based on the time window.
+				
+				var now = new Date();
+				var limiteDate = config.startDate;
+
+				if (now >= limiteDate){
+					canEdit = false;
+				}
+
+			}
+
+
+
+		 	var opts = retrieveListOptions(req);
+		 	
+			console.log();
+			util.debug("--> games.list ... page: {0}, limit: {1}".format(opts.page, opts.limit));
+			util.debug(prettyjson.render(req.body));
+			opts.criteria.user  = profileUser;
+
+
+
+			User.list({}, function(err, userList){
+
+				Game.list(opts, function(err, data) {
+
+					if (err) return next(err);
+
+					var data2 = [];
+					for (var i in data){
+						data2.push(data[i].toClient());
+					}
+
+				    Game.count().exec(function (err, count) {
+
+						if (err) return next(err);
+
+						res.render("user/games", {
+							loggedIn: req.currentUser.toClient(),
+							games: JSON.stringify(data2), 
+							currentUser: profileUser.toClient(),
+							canEdit: JSON.stringify(canEdit),
+							users: userList,
+					        page: opts.page + 1,
+			        		pages: Math.ceil(count / opts.limit)
+						});
+				    });
+
+				});
+
+			});
+
+		});
+	});
+
+
+//	opts = {};
+
+//	});
+
+}
+
 /**
  * List of links
  *
@@ -67,9 +189,9 @@ exports.create = function(req, res, next) {
 	var link = new Link({
 		url: req.body.url, 
 		title: req.body.title,
-		category: req.body.category,
-		tags: req.body.tags,
-		user: req.user
+		// category: req.body.category,
+		// tags: req.body.tags,
+		user: req.currentUser
 	});
 
 	link.save(function(err, _link){
@@ -100,6 +222,8 @@ exports.show = function(req, res, next) {
 		}
 	});
 }
+
+
 
 exports.update = function(req, res, next) {
 
@@ -217,8 +341,16 @@ function updateAndSaveLink(req, data, cb){
 
 }
 
-
-
+/*
+	opts: {
+		criteria: {
+			user: "username",
+			category: "javascript"
+		},
+		limit: 15,
+		page: 2
+	}
+*/
 function retrieveListOptions(req){
 
 	var page = (req.param('page') > 0 ? req.param('page') : 1) - 1
@@ -231,7 +363,7 @@ function retrieveListOptions(req){
 	//conditionally add members to object
 	var criteria = {};
 
-	if (req.user) criteria.user = req.user;
+	if (req.currentUser) criteria.user = req.currentUser;
 	if (req.body.category) criteria.category = req.body.category;
 
 	return {

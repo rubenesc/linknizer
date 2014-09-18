@@ -1,0 +1,44 @@
+
+
+
+
+
+
+
+<body class="register-container">
+	<div  id="register-box">
+		<div class="toggle">
+			<h2>Forgot Password</h2> 
+		</div>
+
+		<div id="forgot-form" class="register-form">
+		
+			<ul class="nav-panel">
+		        {{#each message}}
+		            <li>{{this}}</li>
+		        {{/each}}
+			</ul>
+
+			<form class="form-horizontal" role="form" action="/forgot" method="post">
+			  
+			  <div class="form-group">
+			    <div class="col-sm-10">
+			      <input type="email" name="email" class="form-control" id="inputEmail3" placeholder="Email">
+			    </div>
+			  </div>
+
+			  <div class="form-group">
+			    <div class="col-sm-10">
+			      <button id="forgot-btn" class="btn btn-default">Get new password</button>
+			      <a href="/login" class="register-lnk" style="margin-left:20px;">Sign in</a> 
+			      <a href="/register" class="register-lnk" style="margin-left:20px;">Register</a> 
+			    </div>
+			  </div>
+
+			</form>
+		</div>
+
+	<div>
+
+	
+</body>

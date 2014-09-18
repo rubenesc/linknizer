@@ -13,6 +13,12 @@ define(['backbone', 'models/link'], function(Backbone, Link) {
 		this.page = response.page;
 		this.pages = response.pages;
 		return response.links;
+	},
+
+	validate: function(attrs){
+		if (!attrs.url){
+			return "Please enter a url";
+		}
 	}
 
   });

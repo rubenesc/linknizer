@@ -6,11 +6,12 @@ define(['baseView', 'text!templates/links/link-list-item.html'],
 
   	tagName: 'tr',
 
-  	template: _.template(linkListItemTemplate),
+    template: _.template(linkListItemTemplate),
+  	// template: template("linkItemTemplate"),
 
   	events: {
-      'click a.delete': 'deleteLink',
-  		'click a.edit': 'editLink'
+      'click .delete': 'deleteLink',
+  		'click .edit': 'editLink'
   	},
 
     initialize: function(){
@@ -18,27 +19,38 @@ define(['baseView', 'text!templates/links/link-list-item.html'],
       this.model.on('destroy', this.unrender, this);
       this.model.on('change', this.render, this);
 
+      //Convert a backbone date to mm/dd/yyyy format.
+      _.template.formatdate = function (bDate) {
+        var d = new Date(bDate),
+            fragments = [
+                d.getMonth() + 1,
+                d.getDate(),
+                d.getFullYear()
+            ]; 
+          return fragments.join('/');
+      }      
+
     },
 
   	render: function(){
   		// this.$el.html( this.template( this.model.toJSON() ) );
   		// console.log("linkView.render ["+ this.template( this.model.toJSON() ) +"]");
-  		this.$el.html( _.template(linkListItemTemplate, this.model.toJSON() ) );
-      	return this;
+      this.$el.html( _.template(linkListItemTemplate, this.model.toJSON() ) );
+  		// this.$el.html( this.template(this.model.toJSON()) );
+    	return this;
+
   	},
 
     editLink: function(){
-      console.log("link.editLink [" + this.model.get("id") +"][" + this.model.get("url") +"]["+ this.model.get("title")+"] ");
       vent.trigger("link:edit", this.model);
     },
 
   	deleteLink: function(){
-      console.log("link.deleteLink [" + this.model.get("id") +"][" + this.model.get("url") +"]["+ this.model.get("title")+"] ");
   		this.model.destroy();
   	},
 
   	unrender: function(){
-      console.log("link.unrender [" + this.model.get("id") +"][" + this.model.get("url") +"]["+ this.model.get("title")+"] ");
+      // console.log("link.unrender [" + this.model.get("id") +"][" + this.model.get("url") +"]["+ this.model.get("title")+"] ");
   		//shortcut for: this.$el.remove();
       this.unbind();
   		this.remove();

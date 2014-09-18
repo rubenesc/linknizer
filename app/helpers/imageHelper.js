@@ -5,7 +5,7 @@ var FileHelper = require("../helpers/fileHelper");
 var ApplicationError = require("../helpers/applicationErrors");
 
 var env = process.env.NODE_ENV || 'development'
-var config = require('../../config/conf')[env];
+var config = require('../../config/config')[env];
 
 var knox = require('knox').createClient({
     key: config.s3.key,

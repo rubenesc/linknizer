@@ -3,15 +3,17 @@
  */
 
 var express = require('express'),
-  mongoStore = require('connect-mongo')(express),
-  flash = require('connect-flash'),
-  viewHelpers = require('./middleware/view'),
-  util = require('util'),
-  expressValidator = require('express-validator'),
-  ApplicationError = require("../app/helpers/applicationErrors");
+    favicon = require('serve-favicon'),
+    flash = require('connect-flash'),
+    util = require('util'),
+    logger = require('morgan'),
+    mongoStore = require('connect-mongo')(express),
+    viewHelpers = require('./middleware/view'),
+    expressValidator = require('express-validator'),
+    ApplicationError = require("../app/helpers/applicationErrors");
 
 
-module.exports = function(app, config, passport) {
+module.exports = function(app, config, passport, user) {
 
   app.configure(function() {
 
@@ -24,7 +26,7 @@ module.exports = function(app, config, passport) {
         console.log(res.getHeader('Content-Type'));
         return /json|text|javascript|css/.test(res.getHeader('Content-Type'));
       },
-      level: 9
+      level: 9 
     }));
 
     //Set response headers
@@ -33,11 +35,21 @@ module.exports = function(app, config, passport) {
       return next();
     });
 
-    // set views path, template engine and default layout
-    app.set('views', config.root + '/app/views');
-    app.set('view engine', 'jade');
-    app.use(express.favicon());
-    app.use(express.logger('dev'));
+   app.use(favicon(__dirname + '/../webapp/images/favicon.ico'));
+
+    //handlebars
+    var hbs = require('./middleware/handlebars/hbs-helper')();
+    app.engine('handlebars', hbs.engine);
+    //app.set('views', config.root + '/app/views');
+    app.set('view engine', 'handlebars');
+
+    //setup logging
+    if (app.get('env') !== 'development') {
+        app.use(logger({}));
+    } else {
+        app.use(logger('dev'));
+    }
+
 
     // dynamic helpers
     app.use(viewHelpers(config));
@@ -69,44 +81,70 @@ module.exports = function(app, config, passport) {
     app.use(flash());
 
     // use passport session
-    app.use(passport.initialize());
-    app.use(passport.session());    
+    app.use(passport.initialize({ userProperty: 'currentUser' })); //get authenticated user with: req.currentUser
+    app.use(passport.session());   
+
+    //use connect-roles
+    app.use(user.middleware()); 
 
     //compile coffee script or javascript out of an assets directory.
     app.use(require('connect-assets')());
 
     // routes should be at the last
     app.use(app.router);
+
     // sets up the public directory to use static files
     app.use(express.static(config.root + '/webapp'));
+    util.debug("static: ["+config.root + '/webapp'+"]");
 
     //Error handling - after the router
     //http://expressjs.com/guide.html#error-handling
     app.use(logErrors);
 
     //handle errors
-    app.use(function(err, req, res, next) {
+  app.use(function(err, req, res, next) {
 
       if (err instanceof ApplicationError.Validation){
-        return res.send(400, {error: err} );
+        //Bad Request: 400 
+
+        //Send the user back to the requested page, with an error message
+        if (err.message){
+          req.flash('info', err.message);
+        } else {
+          req.flash('error', "An unexpected error ocurred. Please try again.");
+        }
+
+        if (err.errors){
+          req.flash('error', err.errors);
+        }
+
+        if (err.url){
+          return res.redirect(err.url);
+        }
+
+        return res.redirect(req.url);
       }  
 
       if (err instanceof ApplicationError.ResourceNotFound){
-        return res.send(404, {error: err} );
+        // return res.send(404, {error: err} );
+        return res.render('404', {error: err});
       }  
 
-      //if it has a message then it was a cosume error
+      //if it has a message then it was a costume error
       if (err.message){
 
         var errorObj = { message: err.message, code: err.code};
-        return res.send(err.status?err.status:'500', {error: errorObj} );
+        // return res.send(err.status?err.status:'500', {error: errorObj} );
+        return res.render('500', {error: errorObj});
       }
 
       // if it has stack then something went really bad
       if (err.stack){
-        return res.send('500', {
-          error: 'Internal Server Error'
-        });
+
+        return res.render('500', {error: 'Internal Server Error'});
+        // return res.send('500', {
+        //   error: 'Internal Server Error'
+        // });
       }
     
       //the next handler is the 404.
@@ -117,13 +155,21 @@ module.exports = function(app, config, passport) {
     // assume 404 since no middleware responded
     app.use(function(req, res, next) {
 
-      res.send('404', {
-        message: "not found ...",
-        url: req.url
-      });
+      var isApi = false;
+
+      if (isApi) {
+        res.send('404', {
+          message: "not found ...",
+          url: req.url
+        });
+      } else {
+        return res.render('404', {
+          message: "not found ...",
+          url: req.url
+        });
+      }
 
     });
-
   });
 
   app.configure('development', function() {

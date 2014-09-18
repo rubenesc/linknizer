@@ -28,6 +28,7 @@
                   index: { unique: true }, lowercase: true, 
                   match: usernameRegex },
       name: { type: String, default: '' },
+      role: { type: String, default: '' },
       provider: { type: String, default: '' },
       hashed_password: { type: String, default: '' },
       salt: { type: String, default: '' },
@@ -58,12 +59,6 @@
     };
 
     // the below 4 validations only apply if you are signing up traditionally
-    UserSchema.path('name').validate(function(name) {
-      // if you are authenticating by any of the oauth strategies, don't validate
-      if(authTypes.indexOf(this.provider) !== -1) return true
-      return name.length
-    }, 'Name cannot be blank');
-
     UserSchema.path('email').validate(function(email) {
       // if you are authenticating by any of the oauth strategies, don't validate
       if(authTypes.indexOf(this.provider) !== -1) return true
@@ -91,10 +86,11 @@
         return next();
       }
 
-      //if no name is specified, then I'll use the username
-      // if (!name){
-      //   name = username;
+      // if no name is specified, then I'll use the username
+      // if (!this.name){
+      //   this.name = this.username;
       // }
+
       if(!validatePresenceOf(this.password) && authTypes.indexOf(this.provider) === -1){
         next(new AppError('Invalid password'))
       } else {
@@ -136,6 +132,14 @@
     return crypto.createHmac('sha1', this.salt).update(password).digest('hex')
   });
 
+  UserSchema.method('isAdmin', function() {
+    
+    // if(role && role === 'admin') return true;
+    if (this.username === 'admin') return true;
+
+    return false;
+
+  });  
 
   UserSchema.method('toClient', function() {
     var obj = this.toObject();

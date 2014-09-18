@@ -1,0 +1,54 @@
+
+
+<div class="container">
+
+	<section>
+		<div class="page-header" id="section-contact">
+			<h2>Login</h2>
+		</div> 
+
+		<ul class="nav-panel">
+	        {{#each message}}
+	            <li>{{this}}</li>
+	        {{/each}}
+		</ul>
+
+		<div class="row">
+
+			<div class="col-lg-8">
+				<form action="/login" class="form-horizontal" role="form" method="post">
+					<div class="form-group">
+						<label for="email" class="col-lg-2 control-label">Email address</label>
+
+						<div class="col-lg-10">
+							<input type="email" class="form-control" name="email" id="email">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="password" class="col-lg-2 control-label">Password</label>
+
+						<div class="col-lg-10">
+							<input type="password" class="form-control" name="password" id="password" >
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-lg-10 col-lg-offset-2">
+							<button type="submit" class="btn btn-primary">Log In</button>
+							<a href="/" class="btn btn-link">Cancel</a>
+						</div>
+
+					</div>
+				</form>
+			</div>
+
+		</div> 
+	</section>
+
+</div>
+
+
+
+
+
+
+

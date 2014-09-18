@@ -1,0 +1,66 @@
+
+module.exports = {
+    development: {
+      root: require('path').normalize(__dirname + '/..'),
+      app: {
+        name: 'Development'
+      },
+      db: 'mongodb://localhost/db_dev',
+
+      s3: {
+        key: '_KEY_',
+        secret: '_SECRET_',
+        bucket: 'dev.bucket'
+      },
+      
+      smtp: {
+        service: "Gmail",
+        user: "YOUR_USERNAME@gmail.com",
+        pass: "YOUR_PASSWORD"
+      },
+
+      sessionSecret: 'this_is_a_secret_key'
+    }
+  , test: {
+      root: require('path').normalize(__dirname + '/..'),
+      app: {
+        name: 'Test'
+      },
+      db: 'mongodb://localhost/db_test',
+
+      s3: {
+        key: '_KEY_',
+        secret: '_SECRET_',
+        bucket: 'test.bucket'
+      },
+      
+      smtp: {
+        service: "Gmail",
+        user: "YOUR_USERNAME@gmail.com",
+        pass: "YOUR_PASSWORD"
+      },
+
+      sessionSecret: 'this_is_a_secret_key'
+    }
+  , production: {
+      root: require('path').normalize(__dirname + '/..'),
+      app: {
+        name: 'Prod'
+      },
+      db: 'mongodb://localhost/db_prod',
+
+      s3: {
+        key: '_KEY_',
+        secret: '_SECRET_',
+        bucket: 'prod.bucket'
+      },
+      
+      smtp: {
+        service: "Gmail",
+        user: "YOUR_USERNAME@gmail.com",
+        pass: "YOUR_PASSWORD"
+      },
+
+      sessionSecret: 'this_is_a_secret_key'
+    }
+}
