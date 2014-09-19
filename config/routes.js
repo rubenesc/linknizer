@@ -13,17 +13,17 @@ module.exports = function(app, passport, auth, user) {
 
 	app.get("/", function(req, res){
 		if (req.currentUser){
-			return res.redirect("/users/"+req.currentUser.username);		
+			return res.redirect("/links");		
 		} else {
 			return res.render("index");
 		}
 	});	
 
 	app.get('/logout', auth.requiresLogin, function(req, res){
-		console.log("ajajajajja"); 
+		req.logout();
 		res.redirect("/");
 	});
-	
+
 
 	//user - login
 	app.get("/login", function(req, res){ res.render("login"); });

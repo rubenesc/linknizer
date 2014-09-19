@@ -46,14 +46,19 @@
 					<span class="icon-bar"></span>
 				</button>
 
-				<a href="index.html" class="navbar-brand">Linknizr</a>
+				<a href="/" class="navbar-brand">Linknizr</a>
 			</div> <!-- end navbar-header -->
 
 			<div class="collapse navbar-collapse" id="navbar-collapse">
 				
-				<a href="/signup" class="btn btn-success navbar-btn navbar-right">Create Account</a>
+				{{#if currentUser}}
+					<a href="/logout" class="btn btn-success navbar-btn navbar-right">Logout  </a>				
+				{{else}}
+					<a href="/signup" class="btn btn-success navbar-btn navbar-right">Create Account  </a>
 
-				<a href="/login" class="btn btn-link navbar-btn navbar-right">Sign In</a>
+					<a href="/login" class="btn btn-link navbar-btn navbar-right">Sign In</a>
+				{{/if}}
+
 
 
 

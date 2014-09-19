@@ -3,20 +3,19 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , fs = require('fs')
-  , passport = require('passport')
-  , prettyjson = require('prettyjson'); // this is cool for debugging
-
+var express = require('express');
+var fs = require('fs');
+var passport = require('passport');
+var prettyjson = require('prettyjson'); // this is cool for debugging
 var util = require('util');  
 
 //this provides namespace capabilities to express routes.
 require('express-namespace');
    
 // Load configurations
-var config = require('./config/config')
-  , auth = require('./config/middleware/auth/authorization')
-  , mongoose = require('mongoose');
+var config = require('./config/config');
+var auth = require('./config/middleware/auth/authorization');
+var mongoose = require('mongoose');
 
 //first, checks if it isn't implemented yet
 if (!String.prototype.format) {

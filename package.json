@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development node app.js",
+    "start": "NODE_ENV=production node app.js",
     "test": "NODE_ENV=test ./bin/test",
     "devserver": "NODE_ENV=development ./node_modules/node-dev/node-dev --debug app.js"
   },
@@ -41,12 +41,13 @@
     "nodemailer": "~0.7.0",
     "moment": "~2.7.0",
     "morgan": "~1.1.1",
-    "cache-manager": "~0.8.0"    
+    "cache-manager": "~0.8.0",
+    "cheerio": "~0.17.0", 
+    "request": "~2.44.0"
   },
   "devDependencies": {
     "node-dev": "~0.2.9",
     "mocha": "~1.7.4",
-    "request": "~2.12.0",
     "should": "~1.2.1",
     "form-data": "~0.1.0"
   },

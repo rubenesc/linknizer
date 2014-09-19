@@ -22,8 +22,6 @@ module.exports = new FacebookStrategy({
       criteria: { 'facebook.id': profile.id }
     };
 
-    console.dir(profile);
-
     User.load(options, function (err, user) {
 
       if (err) return done(err);

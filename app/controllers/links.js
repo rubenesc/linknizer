@@ -1,12 +1,12 @@
-var mongoose = require('mongoose'),
-	Link = mongoose.model('Link'),
-	_ = require('underscore'),
-	prettyjson = require('prettyjson'),
-	check = require('validator').check;
+var mongoose = require('mongoose');
+var Link = mongoose.model('Link');
+var _ = require('underscore');
+var prettyjson = require('prettyjson');
+var check = require('validator').check;
 var Validator = require('validator').Validator;	
 var util = require('util');
 var ApplicationError = require("../helpers/applicationErrors");
-
+var UrlHelper = require("../helpers/urlHelper");
 
 
  exports.list2 = function(req, res, next) {
@@ -185,20 +185,32 @@ exports.create = function(req, res, next) {
 		return next(new ApplicationError.Validation(message, errors)); //--> return res.send(400, Validation);
 	}
 
-	//build obj
-	var link = new Link({
-		url: req.body.url, 
-		title: req.body.title,
-		// category: req.body.category,
-		// tags: req.body.tags,
-		user: req.currentUser
-	});
+	var url = req.body.url;
+	UrlHelper.scrapData(url, function(err, data){
 
-	link.save(function(err, _link){
+		if (err){
+			util.error("-- Error requesting url--> ["+url+"]["+err.message+"]");
+			data = {};
+		}
 
-    	if (err) return next(err);	
+		//build obj
+		var title = req.body.title || data.title;
 
-		return res.send(201, {link: _link.toClient()});
+		var link = new Link({
+			url: url, 
+			title: title,
+			// category: req.body.category,
+			// tags: req.body.tags,
+			user: req.currentUser
+		});
+
+		link.save(function(err, _link){
+
+	    	if (err) return next(err);	
+
+			return res.send(201, {link: _link.toClient()});
+		});
+
 	});
 
 }
