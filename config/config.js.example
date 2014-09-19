@@ -9,6 +9,8 @@ var config =  {
         name: 'Linknizer: Development'
       },
 
+      httpPort: 3000,
+
       db: 'mongodb://localhost/db_links_dev',
 
       facebook: {
@@ -41,6 +43,8 @@ var config =  {
         name: 'Linknizer: Testing'
       },
 
+      httpPort: 3001,
+
       db: 'mongodb://localhost/db_links_test',
 
       facebook: {
@@ -72,6 +76,8 @@ var config =  {
       app: {
         name: 'Linknizer'
       },
+
+      httpPort: 3002,
 
       db: 'mongodb://localhost/db_links',
       
