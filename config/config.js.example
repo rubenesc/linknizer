@@ -1,22 +1,58 @@
 
-module.exports = {
+var config =  {
+
     development: {
+
       root: require('path').normalize(__dirname + '/..'),
+
       app: {
-        name: 'Development'
+        name: 'Linknizer: Development'
       },
-      db: 'mongodb://localhost/db_dev',
+
+      db: 'mongodb://localhost/db_links_dev',
 
       facebook: {
         clientID: "", 
-        clientSecret: "",
-        callbackURL: "http://localhost:3000/auth/facebook/callback"
+        clientSecret: "", 
+        callbackURL: "http://localhost:3000/auth/facebook/callback" 
       },
 
       s3: {
-        key: '_KEY_',
-        secret: '_SECRET_',
-        bucket: 'dev.bucket'
+        key: '',
+        secret: '',
+        bucket: ''
+      },
+
+      smtp: {
+        service: "Gmail",
+        user: "YOUR_USERNAME@gmail.com",
+        pass: "YOUR_PASSWORD"
+      },
+      
+      sessionSecret: 'this_is_a_secret_key'
+
+    }, 
+
+    test: {
+
+      root: require('path').normalize(__dirname + '/..'),
+      
+      app: {
+        name: 'Linknizer: Testing'
+      },
+
+      db: 'mongodb://localhost/db_links_test',
+
+      facebook: {
+        clientID: "", 
+        clientSecret: "", 
+        callbackURL: "http://localhost:3000/auth/facebook/callback" 
+      },
+
+      s3: {
+        key: '',
+        secret: '',
+        bucket: ''
       },
       
       smtp: {
@@ -24,26 +60,31 @@ module.exports = {
         user: "YOUR_USERNAME@gmail.com",
         pass: "YOUR_PASSWORD"
       },
-
+            
       sessionSecret: 'this_is_a_secret_key'
-    }
-  , test: {
-      root: require('path').normalize(__dirname + '/..'),
-      app: {
-        name: 'Test'
-      },
-      db: 'mongodb://localhost/db_test',
+      
+    }, 
 
+    production: {
+
+      root: require('path').normalize(__dirname + '/..'),
+
+      app: {
+        name: 'Linknizer'
+      },
+
+      db: 'mongodb://localhost/db_links',
+      
       facebook: {
         clientID: "", 
-        clientSecret: "",
-        callbackURL: "http://localhost:3000/auth/facebook/callback"
+        clientSecret: "", 
+        callbackURL: "http://localhost:3000/auth/facebook/callback" 
       },
-
+      
       s3: {
-        key: '_KEY_',
-        secret: '_SECRET_',
-        bucket: 'test.bucket'
+        key: '',
+        secret: '',
+        bucket: ''
       },
       
       smtp: {
@@ -51,34 +92,10 @@ module.exports = {
         user: "YOUR_USERNAME@gmail.com",
         pass: "YOUR_PASSWORD"
       },
-
+            
       sessionSecret: 'this_is_a_secret_key'
-    }
-  , production: {
-      root: require('path').normalize(__dirname + '/..'),
-      app: {
-        name: 'Prod'
-      },
-      db: 'mongodb://localhost/db_prod',
-
-      facebook: {
-        clientID: "", 
-        clientSecret: "",
-        callbackURL: "http://localhost:3000/auth/facebook/callback"
-      },
-
-      s3: {
-        key: '_KEY_',
-        secret: '_SECRET_',
-        bucket: 'prod.bucket'
-      },
       
-      smtp: {
-        service: "Gmail",
-        user: "YOUR_USERNAME@gmail.com",
-        pass: "YOUR_PASSWORD"
-      },
-
-      sessionSecret: 'this_is_a_secret_key'
     }
 }
+
+module.exports = config[process.env.NODE_ENV || 'development'];
