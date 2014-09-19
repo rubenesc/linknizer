@@ -87,11 +87,9 @@
         this.modifiedDate = new Date;
         return next();
       }
-
-      // if no name is specified, then I'll use the username
-      // if (!this.name){
-      //   this.name = this.username;
-      // }
+      if (!this.username){
+        this.username = this._id;
+      }
 
       if (!validatePresenceOf(this.password) && !this.skipValidation()) {
         next(new AppError('Invalid password'))
