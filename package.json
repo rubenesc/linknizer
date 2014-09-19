@@ -2,14 +2,15 @@
   "name": "linknizer",
   "version": "0.0.1-43",
   "private": false,
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=development node app.js",
+    "start": "NODE_ENV=production node app.js",
     "test": "NODE_ENV=test ./bin/test",
     "devserver": "NODE_ENV=development ./node_modules/node-dev/node-dev --debug app.js"
   },
   "dependencies": {
     "express": "3.0.5",
-    "jade": "*",
     "coffee-script": "~1.4.0",
     "mongoose": "latest",
     "connect-mongo": "~0.2.0",
@@ -33,15 +34,27 @@
     "gm": "~1.10.0",
     "oauth2orize": "~0.1.0",
     "passport-http-bearer": "~1.0.1",
-    "passport-oauth2-client-password": "~0.1.1"
+    "passport-oauth2-client-password": "~0.1.1",
+    "express3-handlebars": "latest",
+    "connect-roles": "~3.0.3",
+    "serve-favicon": "~2.0.1",
+    "nodemailer": "~0.7.0",
+    "moment": "~2.7.0",
+    "morgan": "~1.1.1",
+    "cache-manager": "~0.8.0",
+    "cheerio": "~0.17.0", 
+    "request": "~2.44.0"
   },
   "devDependencies": {
     "node-dev": "~0.2.9",
     "mocha": "~1.7.4",
-    "request": "~2.12.0",
     "should": "~1.2.1",
     "form-data": "~0.1.0"
   },
+  "author": "",
+  "subdomain": "lapolla",
   "license": "BSD",
-  "description": "Description ==========="
+  "engines": {
+    "node": "0.10.x"
+  }
 }

@@ -1,9 +1,21 @@
 
 
+<td class="setWidth concat">
+	<div>
+		<a href="<%=url%>" target="_blank"><%= url %></a>
+	</div>
+</td>
+<td class="setWidth concat">
+	<div><%= title %></div>
+</td>
+<td>
+	<%= _.template.formatdate(createdDate) %>
+</td>
+<td>
+	<a class="btn btn-link edit" 
+		data-toggle="modal" data-target="#edit-link">edit</a> 
+	<a class="btn btn-link delete">delete</a>
+</td>
 
-<td><%= id %></td>
-<td><a href="<%=url%>"><%= url %></a></td>
-<td><%= title %></td>
-<td><%= category %></td>
-<td><a href="#links/<%= id %>/edit" class="edit">edit</a></td>
-<td><a href="#links/<%= id %>" class="delete">delete</a></td>
+
+

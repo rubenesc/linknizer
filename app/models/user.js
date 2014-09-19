@@ -7,8 +7,13 @@
       Schema = mongoose.Schema,
       crypto = require('crypto'),
       _ = require('underscore'),
-      authTypes = ['twitter', 'facebook', 'google'],
       AppError = require("../helpers/appError");
+
+    var oAuthTypes = [
+      'twitter',
+      'facebook',
+      'google'
+    ];      
 
     var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,4}))$/;
 
@@ -24,10 +29,11 @@
       email: { type: String, unique: true, 
                lowercase: true, match: emailRegex },
 
-      username: { type: String, unique: true, required: true, 
+      username: { type: String, unique: true, 
                   index: { unique: true }, lowercase: true, 
                   match: usernameRegex },
       name: { type: String, default: '' },
+      role: { type: String, default: '' },
       provider: { type: String, default: '' },
       hashed_password: { type: String, default: '' },
       salt: { type: String, default: '' },
@@ -58,27 +64,18 @@
     };
 
     // the below 4 validations only apply if you are signing up traditionally
-    UserSchema.path('name').validate(function(name) {
-      // if you are authenticating by any of the oauth strategies, don't validate
-      if(authTypes.indexOf(this.provider) !== -1) return true
-      return name.length
-    }, 'Name cannot be blank');
-
     UserSchema.path('email').validate(function(email) {
-      // if you are authenticating by any of the oauth strategies, don't validate
-      if(authTypes.indexOf(this.provider) !== -1) return true
+      if (this.skipValidation()) return true;
       return email.length
     }, 'Email cannot be blank');
 
     UserSchema.path('username').validate(function(username) {
-      // if you are authenticating by any of the oauth strategies, don't validate
-      if(authTypes.indexOf(this.provider) !== -1) return true
+      if (this.skipValidation()) return true;
       return username.length
     }, 'Username cannot be blank');
 
     UserSchema.path('hashed_password').validate(function(hashed_password) {
-      // if you are authenticating by any of the oauth strategies, don't validate
-      if(authTypes.indexOf(this.provider) !== -1) return true
+      if (this.skipValidation()) return true;
       return hashed_password.length
     }, 'Password cannot be blank');
 
@@ -91,11 +88,12 @@
         return next();
       }
 
-      //if no name is specified, then I'll use the username
-      // if (!name){
-      //   name = username;
+      // if no name is specified, then I'll use the username
+      // if (!this.name){
+      //   this.name = this.username;
       // }
-      if(!validatePresenceOf(this.password) && authTypes.indexOf(this.provider) === -1){
+
+      if (!validatePresenceOf(this.password) && !this.skipValidation()) {
         next(new AppError('Invalid password'))
       } else {
         next();
@@ -120,24 +118,50 @@
       //     next();
       // });
 
-  /*
-    Methods
-  */
-  UserSchema.method('authenticate', function(plainText) {
+
+
+/**
+ * Methods
+ */
+
+UserSchema.methods = {
+
+  /**
+   * Authenticate - check if the passwords are the same
+   *
+   * @param {String} plainText
+   * @return {Boolean}
+   * @api public
+   */
+  authenticate: function(plainText) {
     return this.encryptPassword(plainText) === this.hashed_password
-  });
+  },
 
-  UserSchema.method('makeSalt', function() {
+  makeSalt: function() {
     return Math.round((new Date().valueOf() * Math.random())) + ''
-  });
+  },
 
-  UserSchema.method('encryptPassword', function(password) {
+  encryptPassword: function(password) {
     if(!password) return ''
     return crypto.createHmac('sha1', this.salt).update(password).digest('hex')
-  });
+  },
 
+  /**
+   * Validation is not required if using OAuth
+   */
+  skipValidation: function() {
+    var x = ~oAuthTypes.indexOf(this.provider);
+    console.log("skipValidation=["+x+"]");
+    return ~oAuthTypes.indexOf(this.provider);
+  },  
 
-  UserSchema.method('toClient', function() {
+  isAdmin: function() {
+    // if(role && role === 'admin') return true;
+    if (this.username === 'admin') return true;
+    return false;
+  },  
+
+  toClient: function() {
     var obj = this.toObject();
 
     //remove _ from id's
@@ -157,7 +181,9 @@
     delete obj.google;
 
     return obj;
-});
+  }
+
+ };    
 
 /*
   static methods
@@ -168,6 +194,13 @@ UserSchema.statics = {
   validateEmail: function(email) {
       return emailRegex.test(email);
   },
+
+  load: function (options, cb) {
+    options.select = options.select || 'name username';
+    this.findOne(options.criteria)
+      .select(options.select)
+      .exec(cb);
+  },  
 
   // createCategory: function(userId, category, cb){
 

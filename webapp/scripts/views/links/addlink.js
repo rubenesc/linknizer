@@ -4,38 +4,38 @@ define(['baseView', 'models/link', 'text!templates/links/link-detail.html'],
 
   var addLinkView = BaseView.extend({
 
-  //	el: '#add-link',
+  	el: '#add-link',
 
-    template: _.template(linkDetailTemplate),
+    // template: _.template(linkDetailTemplate),
 
   	initialize: function(){
-  		console.log("{---addLinkView.initialize---}");	
+
+		this.$("form").hide();
 
   		this.url = this.$('#url');
   		this.title = this.$('#title');
-  		this.category = this.$('#category');
 
   	},
 
   	events: {
-      "change": "change",
+       // "change": "change",
   		'submit': 'addLink'
-       // , "click button.save": "saveLink"
-       , "click button.cancel": "cancelAddLinkForm"
+       , "click .add-link": "showAddLinkForm"
+       , "click .cancel": "cancelAddLinkForm"
   	},
 
     render: function(){
-      console.log("abbbbbzzzzzsdds");
+      // console.log("abbbbbzzzzzsdds");
 
-      // var newLink = new LinkModel();
-      this.model = new LinkModel();
-      var html = this.template( this.model.toJSON() );
-      this.$el.html(html);
+      // // var newLink = new LinkModel();
+      // this.model = new LinkModel();
+      // var html = this.template( this.model.toJSON() );
+      // this.$el.html(html);
 
-      console.log("abbbbbzzzzz");
-      console.log(this.el);
+      // console.log("abbbbbzzzzz");
+      // console.log(this.el);
 
-      return this;
+      // return this;
 
 
     },
@@ -59,38 +59,88 @@ define(['baseView', 'models/link', 'text!templates/links/link-detail.html'],
         // }
     },    
 
-    saveLink: function(){
+    showAddLinkForm: function(e){
 
-      console.log("addLinkForm");
-      this.render();
+		e.preventDefault();
 
+		this.$("form").show();
+      // this.remove();
+      // App.router.navigate("/links", true);
     },
 
-    cancelAddLinkForm: function(){
+    cancelAddLinkForm: function(e){
 
-      console.log("cancelAddLinkForm");
-      this.remove();
-      App.router.navigate("/links", true);
+		e.preventDefault();
 
-
+		this.$("form").hide();
+		this.clearForm();
     },
 
 
   	addLink: function(e){
+
   		e.preventDefault();
 
-      console.log("add Link");
         var self = this;
-        this.model.save(null, {
+
+        //create a Model, 
+        var linkModel = new LinkModel({
+  			url: this.url.val(),
+  			title: this.title.val()});
+
+        linkModel.save(null, {
             success: function (model) {
-              self.render();
-              App.router.navigate("/links", true);
-              // utils.showAlert('Success!', 'Wine saved successfully', 'alert-success');
+			    // console.log(resp);
+            	self.collection.add(linkModel);	
+				this.$("form").hide();
+		  		self.clearForm();
             },
-            error: function () {
-                // utils.showAlert('Error', 'An error occurred while trying to delete this item', 'alert-error');
+            error: function (err) {
             }
-        });
+        });        
+        //save it,
+
+
+
+  	// 	console.log("add link, collection.size[" + this.collection.length+"]");
+  	// 	var newLink = this.collection.create({
+  	// 		url: this.url.val(),
+  	// 		title: this.title.val()
+  	// 	}, {
+  	// 		at: 0,
+  	// 		wait: true, // {wait: true} means wait for the server response to add it to the collection.
+
+			// success : function(resp){
+			//     console.log('success callback');
+			//     console.log(resp);
+		 //  		self.clearForm();
+			//     // that.redirectHomePage();
+			// },
+
+			// error : function(err) {
+			//     console.log('error callback');
+			//     // this error message for dev only
+			//     alert('There was an error. See console for details');
+			//     console.log(err);
+			// }
+
+
+  	// 	}); 
+
+  		// console.log(newLink);
+
+
+
+        // this.model.save(null, {
+        //     success: function (model) {
+        //       self.render();
+        //       App.router.navigate("/links", true);
+        //       // utils.showAlert('Success!', 'Wine saved successfully', 'alert-success');
+        //     },
+        //     error: function () {
+        //         // utils.showAlert('Error', 'An error occurred while trying to delete this item', 'alert-error');
+        //     }
+        // });
 
 
   		// if (this.collection){
@@ -111,7 +161,7 @@ define(['baseView', 'models/link', 'text!templates/links/link-detail.html'],
   	clearForm: function(){
 		this.url.val('');
 		this.title.val('');
-		this.category.val('');
+		// this.category.val('');
   	}
 
   });

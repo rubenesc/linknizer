@@ -4,50 +4,74 @@ define(['baseView', 'text!templates/links/link-detail.html'],
 
   var editLinkView = BaseView.extend({
 
-  	template: _.template(linkDetailTemplate),
+    el: '#edit-link',
 
   	events: {
-  		"submit form": "submit",
-      "click button.cacenl": "cancel"
+  		// "submit": "submit",
+      "click .save": "submit",
+      "click .cancel": "cancel"
   	},
 
-  	initialize: function(){
-      console.log("{---editLinkView.initialize---}");  
+
+    initialize: function(){
       
-  		this.render();
+      this.dialog = $(".modal");
+      this.url = this.$("#url");
+      this.title = this.$("#title");
 
-  		this.form = this.$("form");
-  		this.url = this.form.find("#url");
-  		this.title = this.form.find("#title");
-  		this.category = this.form.find("#category");
+      if (this.model){
+        this.url.val(this.model.get("url"));
+        this.title.val(this.model.get("title"));
+      }
 
-  	},
+      this.render();
+
+    },
+
 
   	render: function(){
-  		var html = this.template( this.model.toJSON() );
-  		this.$el.html(html);
   		return this;
   	},
 
   	submit: function(e){
-  		e.preventDefault();
 
-  		//grab related model
-  		//update its attributes
-  		//sync with server
-  		this.model.save({
+      e.preventDefault();
+
+      var self = this;
+
+  		var m = this.model.save({
   			url: this.url.val(),
-  			title: this.title.val(),
-  			category: this.category.val()
-  		});
+  			title: this.title.val()
+  		}, {
 
-      //we are done letting lets remove the form
-  		this.remove();
+        wait:true,
+
+        success: function (model) {
+
+          self.dialog.modal('hide');
+          self.clearForm();
+
+        },
+
+        error: function (err) {
+
+        }
+
+      });  
+
+      // console.dir(m);      
+
   	}, 
 
     cancel: function(){
-      this.remove();
+        this.clearForm();
+    },
+
+    clearForm: function(){
+      this.url.val('');
+      this.title.val('');
     }
+
 
   });
 

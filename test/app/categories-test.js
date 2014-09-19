@@ -13,7 +13,7 @@ var util = require("util");
 var fs = require('fs');
 
 var env = process.env.NODE_ENV || 'development'
-  , config = require('../../config/conf')[env];
+  , config = require('../../config/config')[env];
 
 /**
 

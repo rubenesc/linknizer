@@ -6,7 +6,7 @@ function(BaseView, EditLinkView) {
   var appView = BaseView.extend({
 
     initialize: function() {
-    	console.log("[AppView.initialize]");
+    	console.log("[AppView1.initialize]");
     	vent.on("link:edit", this.editLink, this);
     },
 

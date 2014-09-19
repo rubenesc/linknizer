@@ -54,7 +54,8 @@ require(['backbone', 'router', 'linknizer', 'views/app', 'views/app2'],
     console.log("====> ["+root+"]");    
     
     // //initialize app    
-    var appView = new AppView();
+    // var appView = new AppView();
+    var appView2 = new AppView2();
 
     // App.router = new Router();
 

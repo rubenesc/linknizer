@@ -4,7 +4,7 @@ define(['backbone'], function(Backbone){
   var Link = Backbone.Model.extend({
 	
 	urlRoot: "/api/links",
-
+ 
 	defaults: {
 		url: '',
 		title: '',
