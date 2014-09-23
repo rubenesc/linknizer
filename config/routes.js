@@ -111,6 +111,7 @@ module.exports = function(app, passport, auth, user) {
 
 		app.get('/links', auth.requiresLogin, links.list);
 		app.post('/links', auth.requiresLogin, links.create);
+		app.post('/links/import', auth.requiresLogin, links.importLinks);
 		app.get('/links/:id', auth.requiresLogin, links.show);
 		app.put('/links/:id', auth.requiresLogin, links.update);
 		app.del('/links/:id', auth.requiresLogin, links.del);

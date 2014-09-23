@@ -7,8 +7,7 @@ define(['baseView', 'text!templates/links/link-detail.html'],
     el: '#edit-link',
 
   	events: {
-  		// "submit": "submit",
-      "click .save": "submit",
+      "click .save": "update",
       "click .cancel": "cancel"
   	},
 
@@ -33,7 +32,7 @@ define(['baseView', 'text!templates/links/link-detail.html'],
   		return this;
   	},
 
-  	submit: function(e){
+  	update: function(e){
 
       e.preventDefault();
 
@@ -47,10 +46,8 @@ define(['baseView', 'text!templates/links/link-detail.html'],
         wait:true,
 
         success: function (model) {
-
           self.dialog.modal('hide');
           self.clearForm();
-
         },
 
         error: function (err) {
@@ -58,8 +55,6 @@ define(['baseView', 'text!templates/links/link-detail.html'],
         }
 
       });  
-
-      // console.dir(m);      
 
   	}, 
 

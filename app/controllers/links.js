@@ -7,6 +7,7 @@ var Validator = require('validator').Validator;
 var util = require('util');
 var ApplicationError = require("../helpers/applicationErrors");
 var UrlHelper = require("../helpers/urlHelper");
+var ImportUrlHelper = require("../helpers/importUrlHelper");
 
 
  exports.list2 = function(req, res, next) {
@@ -168,6 +169,78 @@ var UrlHelper = require("../helpers/urlHelper");
 	    });
 
 	});
+}
+
+
+exports.importLinks = function(req, res, next){
+
+	//request validation
+	var errors = validateImportLinksRequest(req);	
+
+	if(errors.length){
+		return res.send(400, {errors: errors} );
+	}
+	
+	ImportUrlHelper.process({'path': req.files.file.path}, function(err, links){
+
+		if (err)
+			return res.send(400, {errors: err} );
+
+		var models = [];
+		var link;
+		for (var i in links){
+			link = links[i];
+			models.push(new Link({
+				url: link.url, 
+				title: link.title,
+				user: req.currentUser
+			}));
+		}
+
+
+		Link.create(models, function(err){
+
+			//if error is a unique index constraint ignore it.
+			if (err && !err.code && !err.code===11000){
+				return res.send(400, {errors: err} );
+			}
+
+			return res.send(201);
+		});
+
+	});
+
+
+}
+
+
+function validateImportLinksRequest(req){
+
+	var errors = [];
+
+	req.onValidationError(function(msg){
+		errors.push(msg);
+	});
+
+	var validator = new Validator();
+
+	Validator.prototype.error = function (msg) {
+		errors.push(msg);
+	    return this;
+	}
+
+	if (typeof req.files === "undefined") {
+		errors.push('please upload a file');
+	} else {
+
+		validator.check(req.files.file, 'please upload a file').notNull();
+
+		// if (req.files.image){
+		// 	validator.check(req.files.image.type, 'the file ' + req.files.image.name + ', must be an image.').contains('image/');
+		// }
+	}
+
+	return errors;
 }
 
 exports.create = function(req, res, next) {
