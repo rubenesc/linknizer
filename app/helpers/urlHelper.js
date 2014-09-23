@@ -4,14 +4,17 @@ var request = require('request');
 var util = require('util');
 var cheerio = require('cheerio');
 
+
+
 exports.scrapData = function(url, cb){
 
 	request(url, function(err, response, html){
 
+		var json = { "url": url, "title" : "" };
+		
 		if (err) 
-			return cb(err, null);
+			return cb(err, json);
 
-		var json = { title : "" };
 		 
 		if (!err && response.statusCode == 200) {
 

@@ -50,6 +50,9 @@ var LinkSchema = new Schema({
 });
 
 
+// LinkSchema.index({ user: 1, url: 1 }, { unique: true }); 
+LinkSchema.index({ user: 1, url: 1 }); 
+
 LinkSchema.method('toClient', function() {
 
     var obj = this.toObject();
